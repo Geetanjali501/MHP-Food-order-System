@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Food Order System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        header {
+            background-color: #556B2F;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            animation: slideDown 1s ease-in-out;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: #B2BEB5;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: fadeInSection 2s forwards;
+        }
+
+        h1, h2 {
+            margin-bottom: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            opacity: 0;
+            animation: floatIn 1s ease forwards;
+            position: relative;
+            animation-delay: 0.5s; /* Stagger the floating animations */
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item label {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .menu-item input, .menu-item select {
+            width: 50px;
+            text-align: center;
+        }
+
+        .order-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-form input, .order-form select, .order-form button {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .order-form button {
+            background-color: #7D8980;
+            color: white;
+            cursor: pointer;
+        }
+
+        .order-form button:hover {
+            background-color: #A9A9A9;
+            transform: scale(1.05);
+        }
+
+        .order-summary {
+            margin-top: 20px;
+        }
+
+        .order-summary table {
+            width: 100%;
+            border-collapse: collapse;
+            opacity: 0;
+            animation: fadeInTable 2s forwards;
+        }
+
+        .order-summary th, .order-summary td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        .order-summary th {
+            background-color: #7D8980;
+            color: white;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInSection {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes fadeInTable {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Float-in animation */
+        @keyframes floatIn {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(15px);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Hotel Food Available Order System</h1>
+    </header>
+
+    <section>
+<div id="orderSummary"></div>
+        <h2>Available Menu</h2>
+        <form id="order-form" action="/submit-order" method="POST">
+            <div class="menu-item">
+                <label for="dish1">Pasta 🍝</label>
+                <select id="dish1" name="pasta" required>
+                    <option value="0">Select Type</option>
+                    <option value="mexican_pasta">Mexican Pasta</option>
+                    <option value="white_sauce_pasta">White Sauce Pasta</option>
+                    <option value="hot_cheese_pasta">Hot Cheese Pasta</option>
+                </select>
+                <input type="number" id="pasta-quantity" name="pasta_quantity" min="0" value="0" placeholder="Quantity">
+            </div>
+            <div class="menu-item">
+                <label for="dish2">Chicken 🍗</label>
+                <select id="dish2" name="Chicken" required>
+                    <option value="0">Select Type</option>
+                    <option value="Butter_Chicken">Butter Chicken</option>
+                    <option value="Chicken_Tikka">Chicken Tikka</option>
+                    <option value="Chicken_Lollipop">Chicken Lollipop</option>
+                </select>
+                <input type="number" id="chicken-quantity" name="chicken_quantity" min="0" value="0" placeholder="Quantity">
+            </div>
+            <div class="menu-item">
+                <label for="dish3">Salad 🥗</label>
+                <select id="dish3" name="Salad" required>
+                    <option value="0">Select Type</option>
+                    <option value="Macaroni_Salad">Macaroni Salad</option>
+                    <option value="Chicken_Salad">Chicken Salad</option>
+                    <option value="Chilean_Salad">Chilean Salad</option>
+                </select>
+                <input type="number" id="salad-quantity" name="salad_quantity" min="0" value="0" placeholder="Quantity">
+            </div>
+            <div class="menu-item">
+                <label for="dish4">Pizza 🍕</label>
+                <select id="dish4" name="Pizza" required>
+                    <option value="0">Select Type</option>
+                    <option value="Chicken_Pizza">Chicken Pizza</option>
+                    <option value="Veg_Pizza">Veg Pizza</option>
+                    <option value="Cheese_Pizza">Cheese Pizza</option>
+                    <option value="Paneer_Pizza">Paneer Pizza</option>
+                    <option value="Babycorn_Pizza">Babycorn Pizza</option>
+                </select>
+                <input type="number" id="pizza-quantity" name="pizza_quantity" min="0" value="0" placeholder="Quantity">
+            </div>
+            <div class="menu-item">
+                <label for="dish5">Burger 🍔</label>
+                <select id="dish5" name="Burger" required>
+                    <option value="0">Select Type</option>
+                    <option value="Chicken_burger">Chicken burger</option>
+                    <option value="Veg_burger">Veg burger</option>
+                    <option value="Cheese_burger">Cheese burger</option>
+                    <option value="Ham_burger">Ham burger</option>
+                    <option value="Classic_burger">Classic burger</option>
+                </select>
+                <input type="number" id="burger-quantity" name="burger_quantity" min="0" value="0" placeholder="Quantity">
+            </div>
+            <div class="menu-item">
+                <label for="dish6">Ice cream 🍦</label>
+                <select id="dish6" name="Ice cream" required>
+                    <option value="0">Select Type</option>
+                    <option value="Chocolate">Chocolate</option>
+                    <option value="Vanilla">Vanilla</option>
+                    <option value="Red_velvet">Red velvet</option>
+                    <option value="Strawberry">Strawberry</option>
+                    <option value="Black_current">Black current</option>
+                    <option value="Dark_forest">Dark forest</option>
+                    <option value="Fruit_crush">Fruit crush</option>
+                </select>
+                <input type="number" id="icecream-quantity" name="icecream_quantity" min="0" value="0" placeholder="Quantity">
+            </div>
+            <div class="menu-item">
+                <label for="dish7">Biryani 🍚</label>
+                <select id="dish7" name="Biryani's" required>
+                    <option value="0">Select Type</option>
+                    <option value="chicken_biryani">chicken biryani</option>
+                    <option value="Mutton_biryani">Mutton biryani</option>
+                    <option value="Prawns_biryani">Prawns biryani</option>
+                </select>
+                <input type="number" id="biryani-quantity" name="biryani_quantity" min="0" value="0" placeholder="Quantity">
+            </div>
+
+            <h2>Customer Details</h2>
+            <div class="order-form">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="customer_name" required>
+
+                <label for="room-number">Room Number</label>
+                <input type="text" id="room-number" name="room_number" required>
+
+                <label for="delivery-time">Preferred Delivery Time</label>
+                <input type="time" id="delivery-time" name="delivery_time">
+
+                <label for="Block name">Block name</label>
+                <input type="Block" id="Blosk name" name="Block_name">
+                
+                <button type="submit">Place Order</button>
+            </div>
+        </form>
+    </section>
+
+   <section class="order-summary">
+    <h2>Order Summary</h2>
+    <table id="order-summary-table">
+        <thead>
+            <tr>
+                <th>Dish</th>
+                <th>Quantity</th>
+                <th>Price (per unit)</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- JS will fill this -->
+        </tbody>
+    </table>
+</section>
+<script>
+    const menuItems = {
+        mexican_pasta: 12,
+        white_sauce_pasta: 10,
+        hot_cheese_pasta: 14,
+        Butter_Chicken: 15,
+        Chicken_Tikka: 14,
+        Chicken_Lollipop: 16,
+        Macaroni_Salad: 7,
+        Chicken_Salad: 8,
+        Chilean_Salad: 7,
+        Chicken_Pizza: 12,
+        Veg_Pizza: 10,
+        Cheese_Pizza: 11,
+        Paneer_Pizza: 13,
+        Babycorn_Pizza: 9,
+        Chicken_burger: 8,
+        Veg_burger: 6,
+        Cheese_burger: 7,
+        Ham_burger: 9,
+        Classic_burger: 6,
+        Chocolate: 5,
+        Vanilla: 5,
+        Red_velvet: 6,
+        Strawberry: 5,
+        Black_current: 6,
+        Dark_forest: 7,
+        Fruit_crush: 5,
+        chicken_biryani: 10,
+        Mutton_biryani: 12,
+        Prawns_biryani: 14
+    };
+
+    const form = document.getElementById('order-form');
+    const orderSummaryTable = document.getElementById('order-summary-table').getElementsByTagName('tbody')[0];
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        let totalBill = 0;
+        orderSummaryTable.innerHTML = ''; // Clear previous summary
+
+        const selectedItems = [
+            { id: 'dish1', quantityId: 'pasta-quantity' },
+            { id: 'dish2', quantityId: 'chicken-quantity' },
+            { id: 'dish3', quantityId: 'salad-quantity' },
+            { id: 'dish4', quantityId: 'pizza-quantity' },
+            { id: 'dish5', quantityId: 'burger-quantity' },
+            { id: 'dish6', quantityId: 'icecream-quantity' },
+            { id: 'dish7', quantityId: 'biryani-quantity' }
+        ];
+
+        selectedItems.forEach(item => {
+            const dish = document.getElementById(item.id).value;
+            const quantity = document.getElementById(item.quantityId).value;
+
+            if (dish !== "0" && quantity > 0) {
+                const price = menuItems[dish];
+                const total = price * quantity;
+                totalBill += total;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${dish.replace(/_/g, ' ').toUpperCase()}</td>
+                    <td>${quantity}</td>
+                    <td>$${price}</td>
+                    <td>$${total}</td>
+                `;
+                orderSummaryTable.appendChild(row);
+            }
+        });
+
+        const totalRow = document.createElement('tr');
+        totalRow.innerHTML = `
+            <td colspan="3" style="text-align:right; font-weight:bold;">Total Bill</td>
+            <td>$${totalBill}</td>
+        `;
+        orderSummaryTable.appendChild(totalRow);
+
+        // Add "Proceed to Payment" button only once
+        if (!document.getElementById('proceed-button')) {
+            const proceedBtn = document.createElement('button');
+            proceedBtn.id = 'proceed-button';
+            proceedBtn.textContent = 'Proceed to Payment';
+            proceedBtn.style.marginTop = '20px';
+            proceedBtn.style.padding = '10px 20px';
+            proceedBtn.style.backgroundColor = '#4CAF50';
+            proceedBtn.style.color = 'white';
+            proceedBtn.style.border = 'none';
+            proceedBtn.style.borderRadius = '5px';
+            proceedBtn.style.cursor = 'pointer';
+            proceedBtn.addEventListener('click', () => {
+                window.location.href = 'payment.html';
+            });
+
+            document.querySelector('.order-summary').appendChild(proceedBtn);
+        }
+    });
+</script>
+
+</body>
+</html>
