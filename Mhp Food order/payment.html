@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .payment-option {
+      margin-bottom: 15px;
+    }
+    .card-form {
+      display: none;
+      margin-top: 15px;
+    }
+    input[type="text"], input[type="number"], input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: green;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .confirmation {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #d4edda;
+      color: #155724;
+      text-align: center;
+      border: 1px solid #c3e6cb;
+      border-radius: 5px;
+    }
+    .amount {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Payment Page</h2>
+    <div class="totalAmount" >
+       <span id="totalAmount">totalAmount</span>
+    </div>
+
+    <div class="payment-option">
+      <label><input type="radio" name="payment" value="cod"> Cash on Delivery</label><br>
+      <label><input type="radio" name="payment" value="online"> Online Payment</label>
+    </div>
+
+    <div class="card-form" id="cardForm">
+      <input type="text" id="cardNumber" placeholder="Card Number" />
+      <input type="text" id="expiry" placeholder="MM/YY" />
+      <input type="password" id="cvv" placeholder="CVV" />
+    </div>
+
+    <button id="payBtn">Pay</button>
+
+    <div class="confirmation" id="confirmationMessage">
+      ✅ Your order is confirmed!
+    </div>
+  </div>
+
+  <script>
+    const totalAmountSpan = document.getElementById("totalAmount");
+    const cardForm = document.getElementById("cardForm");
+    const payBtn = document.getElementById("payBtn");
+    const confirmationMessage = document.getElementById("confirmationMessage");
+
+    // Get amount from URL
+    const params = new URLSearchParams(window.location.search);
+    const amount = params.get("amount") || 0;
+    totalAmountSpan.textContent = amount;
+
+    const paymentOptions = document.getElementsByName("payment");
+
+    // Show/hide card form based on selection
+    paymentOptions.forEach(option => {
+      option.addEventListener("change", () => {
+        if (option.value === "online") {
+          cardForm.style.display = "block";
+        } else {
+          cardForm.style.display = "none";
+        }
+      });
+    });
+
+    payBtn.addEventListener("click", () => {
+      const selectedOption = [...paymentOptions].find(r => r.checked);
+
+      if (!selectedOption) {
+        alert("Please select a payment option.");
+        return;
+      }
+
+      if (selectedOption.value === "online") {
+        const cardNumber = document.getElementById("cardNumber").value.trim();
+        const expiry = document.getElementById("expiry").value.trim();
+        const cvv = document.getElementById("cvv").value.trim();
+
+        if (!cardNumber || !expiry || !cvv) {
+          alert("Please enter all card details.");
+          return;
+        }
+
+        // Basic validation (you can enhance this)
+        if (cardNumber.length < 12 || cvv.length < 3) {
+          alert("Invalid card details.");
+          return;
+        }
+      }
+
+      // Show confirmation
+      confirmationMessage.style.display = "block";
+    });
+  </script>
+</body>
+</html>
